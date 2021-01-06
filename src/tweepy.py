@@ -1,5 +1,7 @@
 
 import csv, json, tweepy, spacy
+
+from geopy.geocoders import Nominatim
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
@@ -16,6 +18,11 @@ ACCESS_SECRET = keys["ACCESS_SECRET"]
 auth = tweepy.OAuthHandler(CONSUMER_KEY,CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
+
+# geopy methods, where to incorporate?
+geolocator = Nominatim(user_agent="GatourGuide")
+location = geolocator.geocode("La Sagrada Familia")
+print(location.latitude, location.longitude)
 
 # tweets = api.search('La Sagrada Familia') # where to implement this
 
