@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Twitter Files
-*.txt
+credentials.json
