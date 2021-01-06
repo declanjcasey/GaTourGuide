@@ -1,3 +1,5 @@
+
+import csv
 import json
 import tweepy
 import spacy
@@ -6,7 +8,17 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 from textblob import TextBlob
 
+# with open('keys.csv') as csv_file:
+#     csv_reader = csv.reader(csv_file, delimiter=",")
+#     for row in csv_reader:
+#         print(row)
 
+    # CONSUMER_KEY = csv_reader[0]
+    # CONSUMER_SECRET = csv_reader[1]
+    # ACCESS_KEY = csv_reader[2]
+    # ACCESS_SECRET = csv_reader[3]
+
+# CONSUMER_KEY = keys[0]
 CONSUMER_KEY = "jmDsjxJ2BDxSW4asJUBf8ATGr"
 CONSUMER_SECRET = "SDUe0DszTpoqkC0ofivJXaZyIrnZ9gXJ93MPL4JS9A96jDJE5F"
 ACCESS_KEY = "1286383020497342464-Ng02IUfTRfyw9GKRgibnIPJD2Dx7p3"
