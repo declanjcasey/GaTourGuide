@@ -17,7 +17,7 @@ auth = tweepy.OAuthHandler(CONSUMER_KEY,CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
-# tweets = api.search('La Sagrada Familia')
+# tweets = api.search('La Sagrada Familia') # where to implement this
 
 class hashbot():
 
