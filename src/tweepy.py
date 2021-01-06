@@ -1,34 +1,23 @@
 
-import csv
-import json
-import tweepy
-import spacy
+import csv, json, tweepy, spacy
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 from textblob import TextBlob
 
-# with open('keys.csv') as csv_file:
-#     csv_reader = csv.reader(csv_file, delimiter=",")
-#     for row in csv_reader:
-#         print(row)
+k = open("credentials.json", "r")
+keys = json.load(k)
 
-    # CONSUMER_KEY = csv_reader[0]
-    # CONSUMER_SECRET = csv_reader[1]
-    # ACCESS_KEY = csv_reader[2]
-    # ACCESS_SECRET = csv_reader[3]
-
-# CONSUMER_KEY = keys[0]
-CONSUMER_KEY = "jmDsjxJ2BDxSW4asJUBf8ATGr"
-CONSUMER_SECRET = "SDUe0DszTpoqkC0ofivJXaZyIrnZ9gXJ93MPL4JS9A96jDJE5F"
-ACCESS_KEY = "1286383020497342464-Ng02IUfTRfyw9GKRgibnIPJD2Dx7p3"
-ACCESS_SECRET = "Z8jDstdpyPzd4oK4PsW2adM9NUfdo2qu2MLqLhFfsjeVe"
+CONSUMER_KEY = keys["CONSUMER_KEY"]
+CONSUMER_SECRET = keys["CONSUMER_SECRET"]
+ACCESS_KEY = keys["ACCESS_KEY"]
+ACCESS_SECRET = keys["ACCESS_SECRET"]
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY,CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
 api = tweepy.API(auth)
 
-tweets = api.search('La Sagrada Familia')
+# tweets = api.search('La Sagrada Familia')
 
 class hashbot():
 
@@ -37,7 +26,7 @@ class hashbot():
             tweepy.StreamListener = processTweets()
             twitterStream = tweepy.Stream(auth, listener=processTweets)
             # twitterStream.filter(track=[hashtag]) # does this search or filter hastags?
-        except: tweepy.TweepError as t:
+        except tweepy.TweepError as t:
             print(t)
             time.sleep(60)
         except Exception as e:
