@@ -8,4 +8,11 @@ def calcCoordinates(self, location):
     return coordinates
 
 
+# method to search for tweets by coordinates
+# needs implementation in streamer
+def tweetsByCoordinates(self, location):
+    coordinates = calcCoordinates(location)
+    
+
+
 # Other functions to add: calcDistance
