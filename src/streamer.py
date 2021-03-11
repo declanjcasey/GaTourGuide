@@ -1,4 +1,4 @@
-import csv, json, tweepy, sys
+import csv, json, tweepy, sys, re
 #import spacy
 
 #from geopy.geocoders import Nominatim
@@ -7,7 +7,7 @@ import csv, json, tweepy, sys
 #from tweepy import Stream
 #from textblob import TextBlob
 
-k = open("../secrets/credentials.json", "r")
+k = open("secrets/credentials.json", "r")
 keys = json.load(k)
 
 CONSUMER_KEY = keys["CONSUMER_KEY"]
@@ -27,7 +27,7 @@ api = tweepy.API(auth)
 # tweets = api.search('La Sagrada Familia') # where to implement this
 
 #terms = ["Sagrada Familia","sagrada familia","Sagrada familia","sagrada Familia"]
-terms = ["guggenheim","Guggenheim"]
+terms = ["parque", "hotel", "pensión", "hostel", "restaurante", "café", "monumento", "museo", "palacio", "catedral"]
 
 class hashbot():
 
@@ -35,7 +35,7 @@ class hashbot():
         try:
             tweepy.StreamListener = processTweets()
             twitterStream = tweepy.Stream(auth, listener=processTweets())
-            twitterStream.filter(languages=["es"],track=[','.join(terms)]) # does this search or filter hastags?
+            twitterStream.filter(languages=["es"],track=[','.join(terms)]) 
         except tweepy.TweepError as t:
             print(t)
             time.sleep(60)
@@ -46,12 +46,28 @@ class processTweets(tweepy.StreamListener):
 
     def on_data(self, data):
         decoded = json.loads(data)
-        print(decoded)
+        #print(decoded)
+        '''
+            These are the parameters we care about
+        '''
         msg = decoded['text'].replace("\n"," ")
         t_id = decoded['id_str']
         lang = decoded['lang']
-        row = '\t'.join([msg, t_id, lang]) # does this join the whole
-        self.update_log(row)
+        loc = decoded['user']['location'] if decoded['user']['location'] is not None else "x"
+
+        # finds tweets where the location is set to somewhere in Spain
+        regex = r"espana|españa|spain"
+        if re.findall(regex,loc,re.I):
+            # TXT: {msg}\t
+            print(f"USER LOC: {decoded['user']['location']}\tGEO ENABLED: {decoded['user']['geo_enabled']}\tGEO: {decoded['geo']}\tCOORD: {decoded['coordinates']}\tPLACE: {decoded['place']}")
+            if decoded['place'] is not None:
+                print(f"{decoded['place']['bounding_box']['coordinates']}")
+
+        # TODO: Parse correct coordinates _if_ they exist
+
+        # TODO: Figure out what the heck "place" is
+        row = '\t'.join([msg, t_id, lang, loc]) # does this join the whole
+        #self.update_log(row)
 
     # unnecesary?
     def on_error(self, status):
