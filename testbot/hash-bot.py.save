@@ -1,0 +1,69 @@
+#!/usr/bin/env python
+
+import argparse, cgitb, getopt, HTMLParser, json, nltk, tweepy, re, sys, yaml
+from chardet import detect
+from textblob import TextBlob
+from textblob_aptagger import PerceptronTagger
+
+CONSUMER_KEY = "jmDsjxJ2BDxSW4asJUBf8ATGr"
+CONSUMER_SECRET = "SDUe0DszTpoqkC0ofivJXaZyIrnZ9gXJ93MPL4JS9A96jDJE5F"
+ACCESS_KEY = "1286383020497342464-Ng02IUfTRfyw9GKRgibnIPJD2Dx7p3"
+ACCESS_SECRET = "Z8jDstdpyPzd4oK4PsW2adM9NUfdo2qu2MLqLhFfsjeVe"
+
+auth = tweepy.OAuthHandler(CONSUMER_KEY,CONSUMER_SECRET)
+auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
+api = tweepy.API(auth)
+
+hashtag = ""
+hashtags = []
+
+class hashbot():
+
+	def start(self):
+		try:
+			tweepy.streamListener = processTweets()
+        		twitterStream = tweepy.Stream(auth, listener=processTweets())
+       			twitterStream.filter(track=[hashtag])
+		except tweepy.TweepError as t:
+			print t
+			time.sleep(60)
+		except Exception as e:
+			print sys.exc_info()
+		#	time.sleep(60)
+
+class processTweets(tweepy.StreamListener):
+
+	def on_data(self,data):
+		row = ""
+		decoded = json.loads(data)
+		html = HTMLParser.HTMLParser()
+		if 'text' in decoded:
+			message = decoded['text'].lower()
+			encoding = lambda message: detect(message)['encoding']
+			for tag in hashtags:
+				if tag in message and not "@" in message and tag.lstrip() != "" and tag.rstrip() != "":
+					row = tag + "\t" + message
+					self.update_log(row)
+
+	def on_error(self,status):
+		return false
+
+	def update_log(self,row):
+		try:
+			file = '-'.join(hashtags)+"-full.txt"
+			with open("/root/hash-bot/hash-log/"+file,'a') as f:
+				f.write(row+"\n")
+		except Exception as e:
+			print "Exception at update_status: " + str(e)
+
+if __name__ == '__main__':
+
+	parser = argparse.ArgumentParser(description='Hashtag expression; separate multiples by comma.')
+	parser.add_argument('tags',metavar="tags",type=str)
+	args = parser.parse_args()
+
+	hashtag = args.tags
+	hashtags = hashtag.split(",
+	print "Starting search for: " + hashtag
+
+	hashbot().start()
