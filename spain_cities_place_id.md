@@ -6,6 +6,8 @@
 
 - Bilbao: "cd43ea85d651af92"
 
+- Bueu: "e0acb1afc6866c25"
+
 - Cádiz:
 
 - Elche: "3178a2f5b3c63ea4"
@@ -21,6 +23,8 @@
 - Oviedo: "d1272bba8714df3d"
 
 - Palma: "6c1be133511970bc"
+
+- Sabadell: "715325aceccc7851"
 
 - San Sebastián:
 
