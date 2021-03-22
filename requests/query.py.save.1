@@ -1,0 +1,76 @@
+import requests
+import json
+import couchdb
+
+k = open("../GaTourGuide/secrets/credentials.json", "r")
+keys = json.load(k)
+
+TOKEN = keys["FULL_ARCHIVE_BEARER"]
+user = keys["DB_USER"]
+pwd = keys["DB_PWD"]
+db = keys["DB_NAME"]
+op = "_bulk_docs"
+host = "127.0.0.1:5984"
+
+get_headers = {
+    "content-type":"application/json",
+    "authorization": f"Bearer {TOKEN}"
+}
+
+post_headers = {
+    "accept":"application/json",
+    "content-type":"application/json",
+    "referer":f"{host}"
+}
+
+# Archive references 
+query = {
+    "query":"lang:es has:geo gatos",
+    "max_results":500
+    # "fromDate":"201402010000",
+    # "toDate":"201902282359"
+}
+
+# GET REQUESTS
+
+page = "PAGE ME"
+
+while page != "":
+
+    get_response = requests.get(
+        "https://api.twitter.com/2/tweets/search/all",
+        headers = get_headers,
+        params = query
+    )
+
+
+get_r   esults = json.loads(get_response.text)
+
+page = get_results['meta']['next_token']
+
+# for data in get_results["data"]:
+#     print("Tweet ID:", data['id'])
+#     print("Message:", data['text'])
+#     print("\n")
+
+print(get_results) # says 'data' instead of 'docs'
+
+# MANIPILATE THE DATA FIRST,
+# THEN USE POST REQUEST
+
+
+# POST REQUEST
+
+#post_response = requests.post(
+#   f"http://{user}:{pwd}@{host}/{db}/{op}",
+#   headers=post_headers,
+#   data=json.dumps(get_results)
+#)
+
+# print(post_response.text) # error message: {"error":"bad_request","reason":"POST body must include `docs` parameter."}
+# print(post_response.json())
+
+# response_results = json.loads(post_response.text)
+
+# dumped = json.dumps(response.text)
+# print(dumped)
